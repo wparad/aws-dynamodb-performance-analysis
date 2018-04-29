@@ -82,6 +82,7 @@ commander
     console.log('Starting Scan of test data', new Date().toISOString());
     let dynamoDbClient = new aws.DynamoDB.DocumentClient();
     let exclusiveStartKey = null;
+    let totalCount = 0;
     for (let counter = 0; counter < 100; counter++) {
       // let id = uuid.v4();
       console.log(`  ${new Date().toISOString()} - ${counter}`);
@@ -92,10 +93,12 @@ commander
         params.ExclusiveStartKey = exclusiveStartKey;
       }
       let scanResult = await dynamoDbClient.scan(params).promise();
+      totalCount += scanResult.Items.length;
       delete scanResult.Items;
       exclusiveStartKey = scanResult.LastEvaluatedKey;
       console.log('****** Result', scanResult);
     }
+    console.log('=>>>> Total Count', totalCount);
     console.log('=>>>> Done', new Date().toISOString());
   });
 
