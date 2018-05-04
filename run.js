@@ -18,45 +18,18 @@ commander
   .description('Create rows in a dynamoDB table.')
   .action(async() => {
     console.log('Starting generation of test data', new Date().toISOString());
-    for (let outer = 0; outer < 5; outer++) {
+    for (let outer = 0; outer < 9; outer++) {
       let dynamoDbClient = new aws.DynamoDB.DocumentClient();
       let rowCount = 1000;
       let promiseList = [];
+      console.log(`  ${new Date().toISOString()} - ${outer}`);
       for (let counter = 0; counter < rowCount; counter++) {
-        console.log(`  ${new Date().toISOString()} - ${counter}`);
         let getParams = id => ({
           TableName: testingTable,
           Item: {
             itemId: id,
             data: {
-              idAgain: id,
-              counter: counter,
-              someArray: [
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
-              ],
-              someArray4: [
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
-              ],
-              someArray2: [
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
-              ],
-              someArray3: [
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
-              ],
-              nestedObject: {
-                nestedObject: {
-                  nestedObject: {
-                    nestedObject: {
-                      nestedObject: {
-                        nestedObject: {
-                          hello: true
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              longData: '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+              idAgain: id
             }
           }
         });
@@ -71,8 +44,8 @@ commander
         promiseList.push(Promise.all([a, b, c, d, e, f, g, h]));
       }
       await Promise.all(promiseList);
-      console.log('=>>>> Done', new Date().toISOString());
     }
+    console.log('=>>>> Done', new Date().toISOString());
   });
 
 commander
@@ -91,6 +64,9 @@ commander
       };
       if (exclusiveStartKey) {
         params.ExclusiveStartKey = exclusiveStartKey;
+      }
+      if (!exclusiveStartKey && counter) {
+        break;
       }
       let scanResult = await dynamoDbClient.scan(params).promise();
       totalCount += scanResult.Items.length;
