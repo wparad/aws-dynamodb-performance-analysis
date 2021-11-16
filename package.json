@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/wparad/aws-dynamodb-performance-analysis#readme",
   "devDependencies": {
-    "aws-sdk": "^2.229.1",
+    "aws-sdk": "^2.814.0",
     "commander": "^2.15.1",
     "eslint-config-cimpress-atsquad": "^1.0.38",
     "uuid": "^3.2.1"
